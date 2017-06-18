@@ -35,7 +35,6 @@ public class DispatcherServlet extends HttpServlet {
 												   .setName(request.getParameter("name")));
 				}
 			} else if ("/member/update.do".equals(servletPath)) {
-				System.out.println("update start / " + request.getParameter("no"));
 				pageControllerPath = "/member/update";
 				if (request.getParameter("no") != null) {
 					request.setAttribute("memberNo", request.getParameter("no"));
@@ -47,11 +46,12 @@ public class DispatcherServlet extends HttpServlet {
 			} else if ("/auth/logout.do".equals(servletPath)) {
 				pageControllerPath = "/auth/logout";
 			}
-			
+		
 			RequestDispatcher rd = request.getRequestDispatcher(pageControllerPath);
 			rd.include(request, response);
 			
 			String viewUrl = (String)request.getAttribute("viewUrl");
+			
 			if(viewUrl.startsWith("redirect:")) {
 				response.sendRedirect(viewUrl.substring(9));
 				return;
