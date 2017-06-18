@@ -24,6 +24,7 @@ public class DispatcherServlet extends HttpServlet {
 		System.out.println("req.getServletPath() Chk: " + servletPath);
 		try {
 			String pageControllerPath = null;
+
 			if ("/member/list.do".equals(servletPath)) {
 				pageControllerPath = "/member/list";
 			} else if ("/member/add.do".equals(servletPath)) {
