@@ -35,12 +35,10 @@ public class DispatcherServlet extends HttpServlet {
 												   .setName(request.getParameter("name")));
 				}
 			} else if ("/member/update.do".equals(servletPath)) {
+				System.out.println("update start / " + request.getParameter("no"));
 				pageControllerPath = "/member/update";
-				if (request.getParameter("email") != null) {
-					request.setAttribute("member", new Member()
-							   .setNo(Integer.parseInt(request.getParameter("no")))
-							   .setEmail(request.getParameter("email"))
-							   .setName(request.getParameter("name")));
+				if (request.getParameter("no") != null) {
+					request.setAttribute("memberNo", request.getParameter("no"));
 				}
 			} else if ("/member/delete.do".equals(servletPath)) {
 				pageControllerPath = "/member/delete";

@@ -22,23 +22,16 @@ public class MemberUpdateServlet extends HttpServlet {
       HttpServletRequest request, HttpServletResponse response)
           throws ServletException, IOException {
     try {
-      ServletContext sc = this.getServletContext();
-      MemberDao memberDao = (MemberDao)sc.getAttribute("memberDao");
-
-      Member member = memberDao.selectOne(
-          Integer.parseInt(request.getParameter("no")));
-
-      request.setAttribute("member", member);
-
-      RequestDispatcher rd = request.getRequestDispatcher(
-          "/member/MemberUpdateForm.jsp");
-      rd.forward(request, response);
-
+    	System.out.println("Update doGet()");
+	    ServletContext sc = this.getServletContext();
+	    MemberDao memberDao = (MemberDao)sc.getAttribute("memberDao");
+	    int memberNo = Integer.parseInt((String)request.getAttribute("memberNo"));
+   
+        request.setAttribute("member", memberDao.selectOne(memberNo));
+        request.setAttribute("viewUrl", "/member/MemberUpdateForm.jsp");
+	      
     } catch (Exception e) {
-      e.printStackTrace();
-      request.setAttribute("error", e);
-      RequestDispatcher rd = request.getRequestDispatcher("/Error.jsp");
-      rd.forward(request, response);
+    	throw new ServletException(e);
     }
   }
 
@@ -47,21 +40,17 @@ public class MemberUpdateServlet extends HttpServlet {
       HttpServletRequest request, HttpServletResponse response)
           throws ServletException, IOException {
     try {
-      ServletContext sc = this.getServletContext();
-      MemberDao memberDao = (MemberDao) sc.getAttribute("memberDao");  
-      
-      memberDao.update(new Member()
-      .setNo(Integer.parseInt(request.getParameter("no")))
-      .setName(request.getParameter("name"))
-      .setEmail(request.getParameter("email")));
+    	System.out.println("Update doPost()");
+        ServletContext sc = this.getServletContext();
+        MemberDao memberDao = (MemberDao) sc.getAttribute("memberDao");  
 
-      response.sendRedirect("list");
-
+        memberDao.update(new Member()
+    		  			  .setNo(Integer.parseInt(request.getParameter("no")))
+					      .setName(request.getParameter("name"))
+					      .setEmail(request.getParameter("email")));
+        request.setAttribute("viewUrl", "redirect:list.do");
     } catch (Exception e) {
-      e.printStackTrace();
-      request.setAttribute("error", e);
-      RequestDispatcher rd = request.getRequestDispatcher("/Error.jsp");
-      rd.forward(request, response);
+    	throw new ServletException(e);
     }
   }
 }

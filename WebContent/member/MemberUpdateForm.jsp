@@ -10,8 +10,8 @@
 <title>회원정보</title>
 </head>
 <body>
-<h1>회원정보2</h1>
-<form action='update' method='post'>
+<h1>회원정보 업데이트 페이지</h1>
+<form action='update.do' method='post'>
 번호: <input type='text' name='no' value='${member.no}' readonly><br>
 이름: <input type='text' name='name' value='${member.name}'><br>
 이메일: <input type='text' name='email' value='${member.email}'><br>
