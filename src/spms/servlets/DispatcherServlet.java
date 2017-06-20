@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import spms.controls.Controller;
 import spms.controls.MemberAddController;
 import spms.controls.MemberListController;
+import spms.controls.MemberUpdateController;
 import spms.vo.Member;
 
 @WebServlet("*.do")
@@ -39,18 +40,24 @@ public class DispatcherServlet extends HttpServlet {
 				pageController = new MemberListController();
 			} else if ("/member/add.do".equals(servletPath)) {
 				pageController = new MemberAddController();
-				System.out.println("email Chk: " + request.getParameter("email"));
 				if (request.getParameter("email") != null) {
 					model.put("member", new Member()
 										.setEmail(request.getParameter("email"))
 										.setPassword(request.getParameter("password"))
 										.setName(request.getParameter("name")));
 				}
+				
 			} else if ("/member/update.do".equals(servletPath)) {
-				pageControllerPath = "/member/update";
-				if (request.getParameter("no") != null) {
-					request.setAttribute("memberNo", request.getParameter("no"));
+				pageController = new MemberUpdateController();
+				if (request.getParameter("email") != null) {
+					model.put("member", new Member()
+										.setNo(Integer.parseInt(request.getParameter("no")))
+										.setName(request.getParameter("name"))
+										.setEmail(request.getParameter("email")));
+				} else {
+					model.put("memberNo", request.getParameter("no"));
 				}
+				
 			} else if ("/member/delete.do".equals(servletPath)) {
 				pageControllerPath = "/member/delete";
 			} else if ("/auth/login.do".equals(servletPath)) {
@@ -60,7 +67,7 @@ public class DispatcherServlet extends HttpServlet {
 			}
 		
 			String viewUrl = pageController.execute(model);
-			
+		
 			for (String key : model.keySet()) {
 				System.out.println("key: " + key);
 				request.setAttribute(key, model.get(key));
