@@ -10,9 +10,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import spms.controls.Controller;
 import spms.controls.LoginController;
+import spms.controls.LogoutController;
 import spms.controls.MemberAddController;
 import spms.controls.MemberDeleteController;
 import spms.controls.MemberListController;
@@ -59,7 +61,6 @@ public class DispatcherServlet extends HttpServlet {
 				} else {
 					model.put("memberNo", request.getParameter("no"));
 				}
-				
 			} else if ("/member/delete.do".equals(servletPath)) {
 				pageController = new MemberDeleteController();
 				if (request.getParameter("no") != null) {
@@ -68,7 +69,6 @@ public class DispatcherServlet extends HttpServlet {
 			} else if ("/auth/login.do".equals(servletPath)) {
 				pageController = new LoginController();
 				if (request.getParameter("email") != null) {
-					System.out.println("is email");
 					model.put("session", request.getSession());
 					model.put("loginMember", new Member()
 									    .setEmail(request.getParameter("email"))
@@ -76,7 +76,8 @@ public class DispatcherServlet extends HttpServlet {
 				}
 				
 			} else if ("/auth/logout.do".equals(servletPath)) {
-				pageControllerPath = "/auth/logout";
+				pageController = new LogoutController();
+				model.put("session", request.getSession());		
 			}
 		
 			String viewUrl = pageController.execute(model);
