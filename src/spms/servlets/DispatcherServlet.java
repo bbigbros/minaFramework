@@ -12,12 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import spms.controls.Controller;
-import spms.controls.LoginController;
-import spms.controls.LogoutController;
-import spms.controls.MemberAddController;
-import spms.controls.MemberDeleteController;
-import spms.controls.MemberListController;
-import spms.controls.MemberUpdateController;
 import spms.vo.Member;
 
 @WebServlet("*.do")
@@ -45,7 +39,6 @@ public class DispatcherServlet extends HttpServlet {
 										.setPassword(request.getParameter("password"))
 										.setName(request.getParameter("name")));
 				}
-				
 			} else if ("/member/update.do".equals(servletPath)) {
 				if (request.getParameter("email") != null) {
 					model.put("member", new Member()
@@ -53,7 +46,7 @@ public class DispatcherServlet extends HttpServlet {
 										.setName(request.getParameter("name"))
 										.setEmail(request.getParameter("email")));
 				} else {
-					model.put("memberNo", request.getParameter("no"));
+					model.put("no", request.getParameter("no"));
 				}
 			} else if ("/member/delete.do".equals(servletPath)) {
 				if (request.getParameter("no") != null) {

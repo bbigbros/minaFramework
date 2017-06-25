@@ -4,10 +4,11 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import spms.bind.DataBinding;
 import spms.dao.MySqlMemberDao;
 import spms.vo.Member;
 
-public class LoginController implements Controller {
+public class LoginController implements Controller, DataBinding {
 	MySqlMemberDao memberDao;
 	
 	public LoginController setMemberDao(MySqlMemberDao memberDao) {
@@ -15,15 +16,19 @@ public class LoginController implements Controller {
 		this.memberDao = memberDao;
 		return this;
 	}
+	
+	public Object[] getDataBinders() {
+		return new Object[]{ "loginInfo", spms.vo.Member.class};
+	}
+	
 	@Override
 	public String execute(Map<String, Object> model) throws Exception {
-		if (model.get("loginMember") == null) {
+		Member loginInfo = (Member)model.get("loginInfo");
+		if (loginInfo.getEmail() == null) {
 			return "/auth/LogInForm.jsp";
-		} else {
-			Member loginMember = (Member)model.get("loginMember"); 
-			Member member = memberDao.exist(loginMember.getEmail(), loginMember.getPassword());
-			if (member != null) {		
-				System.out.println("hello member");
+		} else { 
+			Member member = memberDao.exist(loginInfo.getEmail(), loginInfo.getPassword());
+			if (member != null) {
 				HttpSession session = (HttpSession)model.get("session");
 				session.setAttribute("member", member);
 				return "redirect:../member/list.do";

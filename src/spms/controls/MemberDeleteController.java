@@ -12,10 +12,15 @@ public class MemberDeleteController implements Controller {
 		this.memberDao = memberDao;
 		return this;
 	}
+	
+	public Object[] getDataBinders() {
+		return new Object[]{ "no", Integer.class };
+	}
+	
 	@Override
 	public String execute(Map<String, Object> model) throws Exception {
-		String no = (String)model.get("memberNo");
-		memberDao.delete(Integer.parseInt(no));
+		int no = (Integer)model.get("no");
+		memberDao.delete(no);
 		
 		return "redirect:list.do";
 	}

@@ -20,7 +20,6 @@ public class ContextLoaderListener implements ServletContextListener {
   @Override
   public void contextInitialized(ServletContextEvent event) {
     try {
-    	System.out.println("서버가 시작되는 알람?? --> contextInitialized start()");
     	ServletContext sc = event.getServletContext();
       
         InitialContext initialContext = new InitialContext();
