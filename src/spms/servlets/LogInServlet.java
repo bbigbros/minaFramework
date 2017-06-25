@@ -42,7 +42,6 @@ public class LogInServlet extends HttpServlet {
       }
     } catch (Exception e) {
       throw new ServletException(e);
-
     }
   }
 }

@@ -18,42 +18,39 @@ public class MySqlMemberDao implements MemberDao{
   public void setDataSource(DataSource ds) {
     this.ds = ds;
   }
-
+  
   public List<Member> selectList() throws Exception {
     Connection connection = null;
     Statement stmt = null;
     ResultSet rs = null;
     
     try {
-      connection = ds.getConnection();
-      stmt = connection.createStatement();
-      rs = stmt.executeQuery(
-          "SELECT MNO,MNAME,EMAIL,CRE_DATE" + 
-              " FROM MEMBERS" +
-          " ORDER BY MNO ASC");
+    	connection = ds.getConnection();
+    	stmt = connection.createStatement();
+    	rs = stmt.executeQuery(
+    			"SELECT MNO,MNAME,EMAIL,CRE_DATE" + 
+                " FROM MEMBERS" +
+                " ORDER BY MNO ASC");
+    	
+    	ArrayList<Member> members = new ArrayList<Member>();
 
-      ArrayList<Member> members = new ArrayList<Member>();
-
-      while(rs.next()) {
-        members.add(new Member()
-        .setNo(rs.getInt("MNO"))
-        .setName(rs.getString("MNAME"))
-        .setEmail(rs.getString("EMAIL"))
-        .setCreatedDate(rs.getDate("CRE_DATE"))	);
-      }
-
-      return members;
-
-    } catch (Exception e) {
-      throw e;
-
-    } finally {
-      try {if (rs != null) rs.close();} catch(Exception e) {}
-      try {if (stmt != null) stmt.close();} catch(Exception e) {}
-      try {if (connection != null) connection.close();} catch(Exception e) {}
-    }
+        while(rs.next()) {
+        	members.add(new Member()
+        			    .setNo(rs.getInt("MNO"))
+                        .setName(rs.getString("MNAME"))
+                        .setEmail(rs.getString("EMAIL"))
+                        .setCreatedDate(rs.getDate("CRE_DATE"))	);
+        }
+        return members;
+     } catch (Exception e) {
+    	throw e;
+     } finally {
+    	 try {if (rs != null) rs.close();} catch(Exception e) {}
+    	 try {if (stmt != null) stmt.close();} catch(Exception e) {}
+    	 try {if (connection != null) connection.close();} catch(Exception e) {}
+     }
   }
-
+  
   public int insert(Member member) throws Exception  {
     Connection connection = null;
     PreparedStatement stmt = null;
@@ -141,7 +138,6 @@ public class MySqlMemberDao implements MemberDao{
 
     } catch (Exception e) {
       throw e;
-
     } finally {
       try {if (stmt != null) stmt.close();} catch(Exception e) {}
       try {if (connection != null) connection.close();} catch(Exception e) {}
