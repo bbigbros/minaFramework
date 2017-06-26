@@ -8,11 +8,14 @@ import javax.servlet.ServletRequest;
 
 public class ServletRequestDataBinder {
 	public static Object bind(ServletRequest request, Class<?> dataType, String dataName) throws Exception {
+		System.out.println("dataType: " + dataType);
+		System.out.println("dataName: " + dataName);
 		if (isPrimitiveType(dataType)) {
 			return createValueObject(dataType, request.getParameter(dataName));
 		}
 		
 		Set<String> paramNames = request.getParameterMap().keySet();
+		System.out.println("paramNames : " +paramNames);
 		Object dataObject = dataType.newInstance();
 		Method m = null;
 		
@@ -26,6 +29,7 @@ public class ServletRequestDataBinder {
 	}
 	
 	private static boolean isPrimitiveType(Class<?> type) {
+		System.out.println("Class<?> Type: " + type.getName());
 		if (type.getName().equals("int")   || type == Integer.class ||
 			type.getName().equals("long")  || type == Long.class ||
 			type.getName().equals("float") || type == Float.class ||
@@ -63,6 +67,7 @@ public class ServletRequestDataBinder {
 			if (!m.getName().startsWith("set")) continue;
 			propName = m.getName().substring(3);
 			if (propName.toLowerCase().equals(name.toLowerCase())) {
+				System.out.println("mm? : " + m);
 				return m;
 			}
 		}

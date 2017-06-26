@@ -32,8 +32,9 @@ public class DispatcherServlet extends HttpServlet {
 			model.put("session", request.getSession());
 	
 			Controller pageController = (Controller)sc.getAttribute(servletPath);
-			
+
 			if (pageController instanceof DataBinding) {
+				System.out.println("pageController : " + servletPath);
 				preparedRequestData(request, model, (DataBinding)pageController);
 			}
 			
@@ -67,10 +68,12 @@ public class DispatcherServlet extends HttpServlet {
 		Class<?> dataType = null;
 		Object dataObj = null;
 		
+		System.out.println("preparedRequestData length: " + dataBinders.length);
 		for (int i = 0; i < dataBinders.length; i+=2) {
 			dataName = (String)dataBinders[i];
 			dataType = (Class<?>)dataBinders[i+1];
 			dataObj  = ServletRequestDataBinder.bind(request, dataType, dataName);
+			System.out.println("dataName: " + dataName + " , " + "dataObj: " + dataObj);
 			model.put(dataName, dataObj);
 		}
 	}

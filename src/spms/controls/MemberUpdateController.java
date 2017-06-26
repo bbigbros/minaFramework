@@ -2,10 +2,11 @@ package spms.controls;
 
 import java.util.Map;
 
+import spms.bind.DataBinding;
 import spms.dao.MySqlMemberDao;
 import spms.vo.Member;
 
-public class MemberUpdateController implements Controller {
+public class MemberUpdateController implements Controller, DataBinding {
 	MySqlMemberDao memberDao;
 	
 	public MemberUpdateController setMemberDao(MySqlMemberDao memberDao) {
@@ -15,19 +16,20 @@ public class MemberUpdateController implements Controller {
 	}
 	
 	public Object[] getDataBinders() {
+		System.out.println("getDataBinders In Updatecontroller");
 		return new Object[]{ "no", Integer.class, 
 							 "member", spms.vo.Member.class };
 	}
 	
 	@Override
 	public String execute(Map<String, Object> model) throws Exception {
-		if (model.get("member") == null) {
+		Member member = (Member)model.get("member");
+		if (member.getEmail() == null) {
 			int no = (Integer)model.get("no");
 			model.put("member", memberDao.selectOne(no));
 			
 			return "/member/MemberUpdateForm.jsp";
 		} else {
-			Member member = (Member)model.get("member");
 			memberDao.update(member);
 			
 			return "redirect:list.do";
@@ -35,3 +37,4 @@ public class MemberUpdateController implements Controller {
 	}
 
 }
+

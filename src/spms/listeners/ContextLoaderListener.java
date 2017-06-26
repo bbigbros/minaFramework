@@ -1,4 +1,4 @@
-package spms.listeners;
+ package spms.listeners;
 
 // 서버에서 제공하는 DataSource 사용하기
 import javax.naming.InitialContext;
@@ -11,6 +11,7 @@ import javax.sql.DataSource;
 import spms.controls.LoginController;
 import spms.controls.LogoutController;
 import spms.controls.MemberAddController;
+import spms.controls.MemberDeleteController;
 import spms.controls.MemberListController;
 import spms.controls.MemberUpdateController;
 import spms.dao.MySqlMemberDao;
@@ -33,7 +34,7 @@ public class ContextLoaderListener implements ServletContextListener {
         sc.setAttribute("/member/list.do",   new MemberListController().setMemberDao(memberDao));
         sc.setAttribute("/member/add.do",    new MemberAddController().setMemberDao(memberDao));
         sc.setAttribute("/member/update.do", new MemberUpdateController().setMemberDao(memberDao));
-        sc.setAttribute("/member/delete.do", new MemberListController().setMemberDao(memberDao));
+        sc.setAttribute("/member/delete.do", new MemberDeleteController().setMemberDao(memberDao));
         
     } catch(Throwable e) {
     	e.printStackTrace();
