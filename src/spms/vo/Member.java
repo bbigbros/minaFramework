@@ -13,7 +13,7 @@ public class Member {
 	public int getNo() {
 		return no;
 	}
-	public Member setNo(int no, String a) {
+	public Member setNo(int no) {
 		this.no = no;
 		return this;
 	}
