@@ -25,26 +25,16 @@ public class ContextLoaderListener implements ServletContextListener {
 		return applicationContext;
 	}
 	
+	
 	@Override
 	public void contextInitialized(ServletContextEvent event) {
 		try {
+			System.out.println("applicationContext: " + applicationContext);
 			ServletContext sc = event.getServletContext();
 			// 추가된 두줄
 			String propertiesPath = sc.getRealPath(sc.getInitParameter("contextConfigLocation"));
 			applicationContext = new ApplicationContext(propertiesPath);
-			
-//	        InitialContext initialContext = new InitialContext();
-//	        DataSource ds = (DataSource)initialContext.lookup("java:comp/env/jdbc/java_db");
-//	      
-//	        MySqlMemberDao memberDao = new MySqlMemberDao();
-//	        memberDao.setDataSource(ds);
-//	      
-//	        sc.setAttribute("/auth/login.do",    new LoginController().setMemberDao(memberDao));
-//	        sc.setAttribute("/auth/logout.do",   new LogoutController());
-//	        sc.setAttribute("/member/list.do",   new MemberListController().setMemberDao(memberDao));
-//	        sc.setAttribute("/member/add.do",    new MemberAddController().setMemberDao(memberDao));
-//	        sc.setAttribute("/member/update.do", new MemberUpdateController().setMemberDao(memberDao));
-//	        sc.setAttribute("/member/delete.do", new MemberDeleteController().setMemberDao(memberDao));
+			System.out.println("applicationContext: " + applicationContext);
 
 	    } catch(Throwable e) {
 	    	e.printStackTrace();

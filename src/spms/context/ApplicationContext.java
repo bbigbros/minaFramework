@@ -16,8 +16,11 @@ public class ApplicationContext {
 	}
 	
 	public ApplicationContext(String propertiesPath) throws Exception {
+		System.out.println("Application Constructor start");
 		Properties props = new Properties();
 		props.load(new FileReader(propertiesPath));
+		System.out.println("propertiesPath: " + propertiesPath);
+		System.out.println("props : " + props);
 		
 		prepareObjects(props);
 		injectDependency();
@@ -35,6 +38,7 @@ public class ApplicationContext {
 				objTable.put(key, ctx.lookup(value));
 			} else {
 				objTable.put(key, Class.forName(value).newInstance());
+				System.out.println("Class.forName(value)after : " + objTable.get(key));
 			}
 		}
 	}
@@ -49,10 +53,18 @@ public class ApplicationContext {
 	
 	private void callSetter(Object obj) throws Exception {
 		Object dependency = null;
+		System.out.println("obj: " + obj);
+		System.out.println("obj.getClass(): " + obj.getClass());
+		for(int i = 0; i < obj.getClass().getMethods().length; i++) {
+			System.out.println("obj.getClass()[" +i+ "]" + "==>" + obj.getClass().getMethods()[i]);
+		}
 		for (Method m : obj.getClass().getMethods()) {
 			if (m.getName().startsWith("set")) {
+				System.out.println("method m.getName() : " + m.getParameterTypes()[0]);
 				dependency = findObjectByType(m.getParameterTypes()[0]);
+				System.out.println("dependency: " + dependency);
 				if (dependency != null) {
+					System.out.println("m.invoke() : " + m);
 					m.invoke(obj, dependency);
 				}
 			}
@@ -60,8 +72,10 @@ public class ApplicationContext {
 	}
 	
 	private Object findObjectByType(Class<?> type) {
-		for (Object obj : objTable.values()) {
+		for (Object obj : objTable.values()) {	
 			if (type.isInstance(obj)) {
+				System.out.println("type: " + type);
+				System.out.println("obj : " + obj);
 				return obj;
 			}
 		}
