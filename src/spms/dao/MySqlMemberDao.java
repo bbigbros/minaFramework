@@ -14,7 +14,7 @@ import spms.annotation.Component;
 import spms.vo.Member;
 
 @Component("memberDao")
-public class MySqlMemberDao implements MemberDao{
+public class MySqlMemberDao implements MemberDao {
   DataSource ds;
 
   public void setDataSource(DataSource ds) {

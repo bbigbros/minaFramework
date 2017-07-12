@@ -32,6 +32,5 @@ public class MemberAddController implements Controller, DataBinding {
 			memberDao.insert(member);
 			return "redirect:list.do";
 		}
-		
 	}
 }
