@@ -4,9 +4,15 @@ import java.io.FileReader;
 import java.lang.reflect.Method;
 import java.util.Hashtable;
 import java.util.Properties;
+import java.util.Set;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
+
+import org.reflections.Reflections;
+
+import spms.annotation.Component;
+
 
 public class ApplicationContext {
 	Hashtable<String, Object> objTable = new Hashtable<String, Object>();
@@ -23,7 +29,22 @@ public class ApplicationContext {
 		System.out.println("props : " + props);
 		
 		prepareObjects(props);
+		prepareAnnotationObjects();
 		injectDependency();
+	}
+	
+	private void prepareAnnotationObjects() throws Exception {
+		Reflections reflector = new Reflections("");
+		Set<Class<?>> list = reflector.getTypesAnnotatedWith(Component.class);
+		System.out.println("dddd ===== " + reflector.getTypesAnnotatedWith(Component.class));
+		String key = null;
+		
+		for(Class<?> clazz : list) {
+			key = clazz.getAnnotation(Component.class).value();
+			System.out.println("key: " + key);
+			objTable.put(key, clazz.newInstance());
+			System.out.println("objTable get : " + objTable.get(key));
+		}
 	}
 	
 	private void prepareObjects(Properties props) throws Exception {

@@ -31,18 +31,18 @@ public class MySqlProjectDao implements ProjectDao {
 	    	rs = stmt.executeQuery(
 	    			"SELECT PNO,PNAME,STA_DATE,END_DATE,STATE" + 
 	                " FROM PROJECTS" +
-	                " ORDER BY STA_DATE");
+	                " ORDER BY PNO DESC");
 	    	
 	    	ArrayList<Project> projects = new ArrayList<Project>();
 
 	        while(rs.next()) {
 	        	projects.add(new Project()
-	        			    	.setNo(rs.getInt("PNO"))
-	        			    	.setTitle(rs.getString("PNAME"))
-	                        	.setStartDate(rs.getDate("STA_DATE"))
-	                        	.setEndDate(rs.getDate("END_DATE"))
-	                        	.setState(rs.getInt("STATE"))
-	                        );
+	        			    	 .setNo(rs.getInt("PNO"))
+	        			    	 .setTitle(rs.getString("PNAME"))
+	                      .setStartDate(rs.getDate("STA_DATE"))
+	                      .setEndDate(rs.getDate("END_DATE"))
+	                      .setState(rs.getInt("STATE"))
+	                    );
 	        }
 	        return projects;
 	     } catch (Exception e) {
