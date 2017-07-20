@@ -24,6 +24,7 @@ public class ApplicationContext {
 	public ApplicationContext(String propertiesPath) throws Exception {
 		System.out.println("Application Constructor start");
 		Properties props = new Properties();
+		System.out.println("before props load : " + props);
 		props.load(new FileReader(propertiesPath));
 		System.out.println("propertiesPath: " + propertiesPath);
 		System.out.println("props : " + props);
@@ -36,11 +37,12 @@ public class ApplicationContext {
 	private void prepareAnnotationObjects() throws Exception {
 		Reflections reflector = new Reflections("");
 		Set<Class<?>> list = reflector.getTypesAnnotatedWith(Component.class);
-		System.out.println("dddd ===== " + reflector.getTypesAnnotatedWith(Component.class));
+		System.out.println("Reflection jobs: " + reflector.getTypesAnnotatedWith(Component.class));
 		String key = null;
 		
 		for(Class<?> clazz : list) {
 			key = clazz.getAnnotation(Component.class).value();
+			System.out.println("before value() : " + clazz.getAnnotation(Component.class));
 			System.out.println("key: " + key);
 			objTable.put(key, clazz.newInstance());
 			System.out.println("objTable get : " + objTable.get(key));
@@ -66,6 +68,7 @@ public class ApplicationContext {
 	
 	private void injectDependency() throws Exception {
 		for (String key : objTable.keySet()) {
+			System.out.println("key >>> " + key);
 			if (!key.startsWith("jndi.")) {
 				callSetter(objTable.get(key));
 			}

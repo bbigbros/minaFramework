@@ -30,7 +30,7 @@ public class MySqlMemberDao implements MemberDao {
     	connection = ds.getConnection();
     	stmt = connection.createStatement();
     	rs = stmt.executeQuery(
-    			"SELECT MNO,MNAME,EMAIL,CRE_DATE" + 
+    			    "SELECT MNO,MNAME,EMAIL,CRE_DATE" + 
                 " FROM MEMBERS" +
                 " ORDER BY MNO ASC");
     	

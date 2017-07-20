@@ -80,6 +80,21 @@ public class MySqlProjectDao implements ProjectDao {
 			try {if (stmt != null) stmt.close();} catch(Exception e) {}
 	    	 	try {if (connection != null) connection.close();} catch(Exception e) {}
 		}
-		
+	}
+	
+	public int delete(int no) throws Exception {
+	    Connection connection = null;
+	    Statement stmt = null;
+	    
+		try {
+			connection = ds.getConnection();
+			stmt = connection.createStatement();
+			return stmt.executeUpdate("DELETE FROM PROJECTS WHERE PNO=" + no);
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			try {if (stmt != null) stmt.close();} catch(Exception e) {}
+    	 		try {if (connection != null) connection.close();} catch(Exception e) {}
+		}
 	}
 }
