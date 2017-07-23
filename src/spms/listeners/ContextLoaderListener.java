@@ -1,21 +1,17 @@
  package spms.listeners;
 
-// 서버에서 제공하는 DataSource 사용하기
-import javax.naming.InitialContext;
+import java.io.InputStream;
+
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
-import javax.sql.DataSource;
+
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
 import spms.context.ApplicationContext;
-import spms.controls.LoginController;
-import spms.controls.LogoutController;
-import spms.controls.MemberAddController;
-import spms.controls.MemberDeleteController;
-import spms.controls.MemberListController;
-import spms.controls.MemberUpdateController;
-import spms.dao.MySqlMemberDao;
 
 @WebListener
 public class ContextLoaderListener implements ServletContextListener {
@@ -30,14 +26,25 @@ public class ContextLoaderListener implements ServletContextListener {
 	public void contextInitialized(ServletContextEvent event) {
 		try {
 			System.out.println("applicationContext: " + applicationContext);
-			ServletContext sc = event.getServletContext();
-			// 추가된 두줄
-			String propertiesPath = sc.getRealPath(sc.getInitParameter("contextConfigLocation"));
-			applicationContext = new ApplicationContext(propertiesPath);
+			
+			applicationContext = new ApplicationContext();
+			String resource = "spms/dao/mybatis-config.xml";
+			System.out.println("resource : " + resource);
+			InputStream inputStream = Resources.getResourceAsStream(resource);
+			System.out.println("inputStream: " + inputStream);
+			SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+			applicationContext.addBean("sqlSessionFactory", sqlSessionFactory);
+			
 			System.out.println("applicationContext: " + applicationContext);
-
+			
+			ServletContext sc = event.getServletContext();
+			String propertiesPath = sc.getRealPath(sc.getInitParameter("contextConfigLocation"));
+			System.out.println("propertiesPath : " + propertiesPath);
+			applicationContext.prepareObjectsByProperties(propertiesPath);
+			applicationContext.prepareObjectsByAnnotation("");
+			applicationContext.injectDependency();
 	    } catch(Throwable e) {
-	    	e.printStackTrace();
+	    		e.printStackTrace();
 	    }
 	}
 

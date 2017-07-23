@@ -18,6 +18,4 @@ SPMS(Simple Project Management System)
 			  !empty sessionScope.member.email }">
 	(<a style="color:white;" href="<%= request.getContextPath() %>/auth/logout.do">로그아웃</a>)
 </c:if>
-
-
 </div>

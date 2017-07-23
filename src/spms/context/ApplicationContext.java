@@ -21,56 +21,35 @@ public class ApplicationContext {
 		return objTable.get(key);
 	}
 	
-	public ApplicationContext(String propertiesPath) throws Exception {
-		System.out.println("Application Constructor start");
-		Properties props = new Properties();
-		System.out.println("before props load : " + props);
-		props.load(new FileReader(propertiesPath));
-		System.out.println("propertiesPath: " + propertiesPath);
-		System.out.println("props : " + props);
-		
-		prepareObjects(props);
-		prepareAnnotationObjects();
-		injectDependency();
+	public void addBean(String name, Object obj) {
+		objTable.put(name, obj);
 	}
 	
-	private void prepareAnnotationObjects() throws Exception {
-		Reflections reflector = new Reflections("");
+	public void prepareObjectsByAnnotation(String basePackage) throws Exception {
+		Reflections reflector = new Reflections(basePackage);
 		Set<Class<?>> list = reflector.getTypesAnnotatedWith(Component.class);
-		System.out.println("Reflection jobs: " + reflector.getTypesAnnotatedWith(Component.class));
 		String key = null;
-		
 		for(Class<?> clazz : list) {
 			key = clazz.getAnnotation(Component.class).value();
-			System.out.println("before value() : " + clazz.getAnnotation(Component.class));
-			System.out.println("key: " + key);
 			objTable.put(key, clazz.newInstance());
-			System.out.println("objTable get : " + objTable.get(key));
 		}
 	}
 	
-	private void prepareObjects(Properties props) throws Exception {
+	public void prepareObjectsByProperties(String propertiesPath) throws Exception {
+		Properties props = new Properties();
+		props.load(new FileReader(propertiesPath));
+		
 		Context ctx = new InitialContext();
 		String key = null;
 		String value = null;
 		
-		for(Object item : props.keySet()) {
+		for (Object item : props.keySet()) {
 			key = (String)item;
 			value = props.getProperty(key);
 			if (key.startsWith("jndi.")) {
 				objTable.put(key, ctx.lookup(value));
 			} else {
 				objTable.put(key, Class.forName(value).newInstance());
-				System.out.println("Class.forName(value)after : " + objTable.get(key));
-			}
-		}
-	}
-	
-	private void injectDependency() throws Exception {
-		for (String key : objTable.keySet()) {
-			System.out.println("key >>> " + key);
-			if (!key.startsWith("jndi.")) {
-				callSetter(objTable.get(key));
 			}
 		}
 	}
@@ -105,4 +84,13 @@ public class ApplicationContext {
 		}
 		return null;
 	}
+	
+	public void injectDependency() throws Exception {
+		for (String key : objTable.keySet()) {
+			System.out.println("key >>> " + key);
+			if (!key.startsWith("jndi.")) {
+				callSetter(objTable.get(key));
+			}
+		}
+	}	
 }
